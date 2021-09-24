@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.IO;
 
 public class MainManager : MonoBehaviour
 {
@@ -15,14 +16,15 @@ public class MainManager : MonoBehaviour
     public GameObject GameOverText;
     
     private bool m_Started = false;
-    private int m_Points;
-    
+    private static int m_Points;
+
+    public static string highScoreName;
+    public static int highScore;
+
     private bool m_GameOver = false;
 
     void Start()
     {
-        //menuUIHandler = canvas.GetComponent<MenuUIHandler>();
-
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -37,6 +39,11 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+    }
+
+    void Awake()
+    {
+        LoadHighScore();
     }
 
     private void Update()
@@ -71,7 +78,48 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        if (m_Points>highScore)
+        {
+            SaveHighScore();
+        }
         m_GameOver = true;
         GameOverText.SetActive(true);
+    }
+
+    [System.Serializable]
+    class SaveData
+    {
+        public string highScoreName;
+        public int highScore;
+    }
+
+    public void SaveHighScore()
+    {
+        SaveData data = new SaveData();
+        data.highScoreName = MainManager.playerName;
+        data.highScore = MainManager.m_Points;
+
+        string json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+
+        Debug.Log("Score Saved!");
+    }
+
+    public void LoadHighScore()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            MainManager.highScoreName = data.highScoreName;
+            MainManager.highScore = data.highScore;
+
+            Debug.Log("Score Loaded!");
+            Debug.Log(highScoreName);
+            Debug.Log(highScore);
+        }
     }
 }

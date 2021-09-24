@@ -11,10 +11,14 @@ using UnityEngine.Events;
 public class MenuUIHandler : MonoBehaviour
 {
     private string playerName;
+    public Text nameText;
 
     public void Start()
     {
-         
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            nameText.text = "Best Score: " + MainManager.highScoreName + " : " + MainManager.highScore;
+        }
     }
     public void StartNew()
     {

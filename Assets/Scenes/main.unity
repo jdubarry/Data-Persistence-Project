@@ -1356,7 +1356,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Best Score : Name : 0'
+  m_Text: 'Best Score : playerName : 0'
 --- !u!222 &2078529057
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1480,4 +1480,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa0564489f30d0e428f4940bc84905d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: 
+  nameText: {fileID: 2078529056}
